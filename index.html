@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Puppet Module Testing</title>
+
+		<meta name="description" content="Hands on puppet module testing">
+		<meta name="author" content="Jan Vansteenkiste">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="reveal.js/css/reveal.min.css">
+		<link rel="stylesheet" href="reveal.js/css/theme/sky.css" id="theme">
+
+		<!-- For syntax highlighting -->
+    <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+
+    <link rel="stylesheet" href="css/style.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="reveal.js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+    <div class="reveal">
+      <div class="slides">
+        <section>
+        <h2>Puppet Module Testing</h2>
+        <h3>Intro</h3>
+        <h3>Prep</h3>
+        <h3>Code!</h3>
+        </section>
+
+        <section>
+        <h2>Introduction</h2>
+        <h3>of myself</h3>
+          <div data-markdown>
+          <script type="text/template">
+            * jan@vstone.eu
+            * Have a blog: [http://vstone.eu](http://vstone.eu),
+            * ... Github too: [http://github.com/vStone/](https://github.com/vStone/),
+            * ... And twitter too, yes: [Jan_vStone](https://twitter.com/Jan_vStone),
+            * ... And google plus...: [http://vstone.eu/googleplus](http://vstone.eu/googleplus)
+            * !! IRC: ...  [irc://irc.freenode.org](irc://irc.freenode.org) nick: vStone
+          </script>
+          </div>
+          </section>
+
+          <section>
+          <h2>Introduction</h2>
+          <h3>of the agenda</h3>
+          <div data-markdown>
+            <script type="text/template">
+              * Vagrant (skipping through)
+              * Testing (Setup)
+                * ruby/bundler stuffs
+                * rake tralala
+              * Tools
+                * rspec-puppet
+                * puppetlabs_spec_helper
+                * hiera puppet testing (?)
+                * rspec-augeas
+              * Extra
+                * travis-ci
+            </script>
+          </div>
+          </section>
+
+          <section>
+          <h2></h2>
+          </section>
+
+          <section>
+          <h2></h2>
+          </section>
+
+          <section>
+          <h2></h2>
+          </section>
+
+      </div><!-- end slides -->
+    </div><!-- end reveal -->
+
+    <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+		<script src="reveal.js/lib/js/head.min.js"></script>
+		<script src="reveal.js/js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'reveal.js/plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } },
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } },
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
