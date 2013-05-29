@@ -1,0 +1,7 @@
+## Ignore from vagrant branch.
+.vagrant
+graphs
+
+## Ignore from talk branch.
+reveal.js/
+
