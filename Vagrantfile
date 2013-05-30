@@ -1,10 +1,16 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# Install plugins using vagrant plugin install vagrant-hostmanager
+Vagrant.require_plugin 'vagrant-hostmanager'
+
 Vagrant.configure("2") do |config|
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
+
+  config.hostmanager.enabled = true
+  config.hostmanager.ignore_private_ip = false
 
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "centos-6.x-64bit-puppet.3.x"
@@ -70,6 +76,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define :foo do |vm_config|
     vm_config.vm.hostname = 'foo.example.com'
+    vm_config.hostmanager.aliases = 'web.example.com'
     vm_config.vm.network :private_network, ip: '192.168.127.100'
     vm_config.vm.network :forwarded_port, guest: 80, host: 10080
 
@@ -86,6 +93,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define :bar do |vm_config|
     vm_config.vm.hostname = 'bar.example.com'
+    vm_config.hostmanager.aliases = 'mysql.example.com'
     vm_config.vm.network :private_network, ip: '192.168.127.200'
 
     vm_config.vm.provider :virtualbox do |vb|
