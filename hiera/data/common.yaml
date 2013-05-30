@@ -1,2 +1,4 @@
 ---
 hiera_example: 'Open the bottle! Drink it! And insert a message.'
+
+autofs::mode: '0640'
