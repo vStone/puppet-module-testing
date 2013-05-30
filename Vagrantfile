@@ -109,4 +109,17 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  config.vm.define :test do |vm_config|
+    vm_config.vm.hostname = 'test.example.com'
+
+    vm_config.vm.provider :virtualbox do |vb|
+      vb.customize [ 'modifyvm', :id, '--name', "p-m-t_test-#{Time.now.to_i}" ]
+    end
+
+    vm_config.vm.provision :shell do |shell|
+      shell.path = 'scripts/puppet_apply.sh'
+      shell.args = 'test'
+    end
+  end
+
 end
