@@ -1,3 +1,5 @@
 node /^test/ {
 
+  include autofs
+
 }
