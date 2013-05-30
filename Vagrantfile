@@ -70,6 +70,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define :foo do |vm_config|
     vm_config.vm.hostname = 'foo.example.com'
+    vm_config.vm.network :forwarded_port, guest: 80, host: 10080
 
     vm_config.vm.provider :virtualbox do |vb|
       vb.customize [ 'modifyvm', :id, '--name', "p-m-t_foo-#{Time.now.to_i}" ]
