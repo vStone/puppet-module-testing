@@ -19,6 +19,19 @@ rsync -alrcWt --del --progress \
 
 
 ###############################################################################
+#  __ _ _  _ __ _ ___ __ _ ___
+# / _` | || / _` / -_) _` (_-<
+# \__,_|\_,_\__, \___\__,_/__/
+#           |___/
+#
+# lens dir exists?
+[ -d /var/lib/puppet/lib/augeas/lenses ] || mkdir -pv /var/lib/puppet/lib/augeas/lenses
+
+# find all custom lenses and copy them over.
+find /vagrant/puppet -iname *.aug -exec cp -v {} /var/lib/puppet/lib/augeas/lenses/ \;
+
+
+###############################################################################
 #                           _
 #  _ __ _  _ _ __ _ __  ___| |_
 # | '_ \ || | '_ \ '_ \/ -_)  _|
