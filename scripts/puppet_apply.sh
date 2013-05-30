@@ -2,6 +2,23 @@
 boxname="${1-unknown}"
 
 ###############################################################################
+#  _    _
+# | |_ (_)___ _ _ __ _
+# | ' \| / -_) '_/ _` |
+# |_||_|_\___|_| \__,_|
+#
+# hieradata folder exists?
+[ -d /etc/puppet/hieradata ] || mkdir -pv /etc/puppet/hieradata
+
+# copy the hiera configuration file
+[ -f /vagrant/hiera/hiera.yaml ] && cp -v /vagrant/hiera/hiera.yaml /etc/puppet/hiera.yaml
+
+# sync the data
+rsync -alrcWt --del --progress \
+  --exclude=.git* /vagrant/hiera/data/ /etc/puppet/hieradata
+
+
+###############################################################################
 #                           _
 #  _ __ _  _ _ __ _ __  ___| |_
 # | '_ \ || | '_ \ '_ \/ -_)  _|
