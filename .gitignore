@@ -1,3 +1,6 @@
+# Ignore puppet debug information
+graphs/
+
 # Ignore vagrant meta data.
 .vagrant/
 

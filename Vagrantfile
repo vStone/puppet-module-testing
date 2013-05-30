@@ -87,10 +87,9 @@ Vagrant.configure("2") do |config|
       vb.customize [ 'modifyvm', :id, '--name', "p-m-t_foo-#{Time.now.to_i}" ]
     end
 
-    vm_config.vm.provision :puppet do |puppet|
-      puppet.manifests_path = "puppet/manifests"
-      puppet.module_path    = "puppet/modules"
-      puppet.manifest_file  = "site.pp"
+    vm_config.vm.provision :shell do |shell|
+      shell.path = 'scripts/puppet_apply.sh'
+      shell.args = 'foo'
     end
   end
 
