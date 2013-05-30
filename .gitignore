@@ -1,3 +1,5 @@
+# Ignore vagrant meta data.
+.vagrant/
+
 # Ignore from talk branch.
 reveal.js/
-
