@@ -1,5 +1,13 @@
 node /^bar/ {
 
-  notify {'Hi, I am bar. No, not the drinks kinda bar.': }
+  package {'mysql-server':
+    ensure => 'installed',
+    alias  => 'mysqld',
+  } ->
+  service {'mysqld':
+    ensure => 'running',
+    enable => true,
+    alias  => 'mysql',
+  }
 
 }
