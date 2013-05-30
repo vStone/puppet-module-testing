@@ -38,13 +38,13 @@ Vagrant.configure("2") do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
-  config.vm.provider :virtualbox do |vb|
+  # config.vm.provider :virtualbox do |vb|
   #   # Don't boot with headless mode
   #   vb.gui = true
   #
   #   # Use VBoxManage to customize the VM. For example to change memory:
-    vb.customize [ 'modifyvm', :id, '--name', "puppet-module-testing-#{Time.now.to_i}" ]
-  end
+  #   vb.customize [ 'modifyvm', :id, '--name', "puppet-module-testing-#{Time.now.to_i}" ]
+  # end
   #
   # View the documentation for the provider you're using for more
   # information on available options.
@@ -67,11 +67,33 @@ Vagrant.configure("2") do |config|
   # #               Managed by Puppet.\n"
   # # }
   #
-  config.vm.provision :puppet do |puppet|
-    puppet.manifests_path = "puppet/manifests"
-    puppet.module_path    = "puppet/modules"
-    puppet.manifest_file  = "site.pp"
+
+  config.vm.define :foo do |vm_config|
+    vm_config.vm.hostname = 'foo.example.com'
+
+    vm_config.vm.provider :virtualbox do |vb|
+      vb.customize [ 'modifyvm', :id, '--name', "p-m-t_foo-#{Time.now.to_i}" ]
+    end
+
+    vm_config.vm.provision :puppet do |puppet|
+      puppet.manifests_path = "puppet/manifests"
+      puppet.module_path    = "puppet/modules"
+      puppet.manifest_file  = "site.pp"
+    end
   end
 
+  config.vm.define :bar do |vm_config|
+    vm_config.vm.hostname = 'bar.example.com'
+
+    vm_config.vm.provider :virtualbox do |vb|
+      vb.customize [ 'modifyvm', :id, '--name', "p-m-t_bar-#{Time.now.to_i}" ]
+    end
+
+    vm_config.vm.provision :puppet do |puppet|
+      puppet.manifests_path = "puppet/manifests"
+      puppet.module_path    = "puppet/modules"
+      puppet.manifest_file  = "site.pp"
+    end
+  end
 
 end

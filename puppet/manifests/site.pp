@@ -1,1 +1,5 @@
-notify {'Provisioning using the puppet provider': }
+import 'nodes/*.pp'
+
+node default {
+  err("There is nothing for this host here...")
+}
