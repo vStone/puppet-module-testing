@@ -9,8 +9,10 @@ Vagrant.configure("2") do |config|
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
 
-  config.hostmanager.enabled = true
+  config.hostmanager.enabled = false
   config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
+
 
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "centos-6.x-64bit-puppet.3.x"
@@ -73,6 +75,7 @@ Vagrant.configure("2") do |config|
   # #               Managed by Puppet.\n"
   # # }
   #
+  config.vm.provision :hostmanager
 
   config.vm.define :foo do |vm_config|
     vm_config.vm.hostname = 'foo.example.com'
