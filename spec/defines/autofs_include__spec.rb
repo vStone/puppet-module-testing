@@ -38,6 +38,13 @@ describe 'autofs::include', :type => :define do
       it { should contain_augeas('autofs::include::update-/exists') }
       it { should contain_file('/etc/auto.newvalue').with_path('/etc/auto.newvalue').with_ensure('present') }
 
+      describe_augeas 'autofs::include::update-/exists', :lens => 'Automaster', :target => 'etc/auto.master' do
+        it 'should modify existing value' do
+          should execute.with_change
+          aug_get('*[. = "/exists"]/map').should == '/etc/auto.newvalue'
+          should execute.idempotently
+        end
+      end
     end
 
     context 'add' do
@@ -52,6 +59,13 @@ describe 'autofs::include', :type => :define do
       it { should contain_augeas('autofs::include::add-/totalynew') }
       it { should contain_file('/etc/auto.newmount').with_path('/etc/auto.newmount').with_ensure('present') }
 
+      describe_augeas 'autofs::include::add-/totalynew', :lens => 'Automaster', :target => 'etc/auto.master' do
+        it 'should add a new entry' do
+          should execute.with_change
+          aug_get('*[. = "/totalynew"]/map').should == '/etc/auto.newmount'
+          should execute.idempotently
+        end
+      end
     end
   end
 
@@ -67,6 +81,14 @@ describe 'autofs::include', :type => :define do
 
       it { should contain_augeas('autofs::include::rm-/remove') }
       it { should contain_file('/etc/auto.remove').without_ensure('absent') }
+
+      describe_augeas 'autofs::include::rm-/remove', :lens => 'Automaster', :target => 'etc/auto.master' do
+        it 'should remove an entry' do
+          should execute.with_change
+          aug_get('*[. = "/remove"]').should == nil
+          should execute.idempotently
+        end
+      end
 
     end
 
