@@ -201,7 +201,7 @@ end</code></pre>
           </section>
 
           <section>
-          <h1>Puppet Module Testing</h1>
+          <h1>Vagrant in the module works</h1>
           <h2>The autofs module</h2>
           <pre><code class="shell">$ cd puppet/modules
 $ git clone git://github.com/vStone/puppet-module-testing autofs
@@ -212,6 +212,38 @@ $ git add submodule git://github.com/vStone/puppet-module-testing puppet/modules
 $ git submodule update
 ## BETTER NOT USE RECURSIVE CHECKOUT WITH THIS MODULE...</code></pre>
           <div class="gitref">[vagrant] git checkout vagrant_puppet_module_start</div>
+          </section>
+
+          <section>
+          <h1>The autofs module</h1>
+          <h2>Basic structure</h2>
+          Some puppet code:
+          <pre><code class="shell">$ git checkout autofs_ppcs_start -- manifests/{init,config,params,service,package}.pp</pre></code>
+          <div class="gitref">[autofs] git checkout autofs_ppcs_start</div>
+          </section>
+
+          <section>
+          <h3>Gemfile</h3>
+          <pre><code class="ruby">source 'https://rubygems.org'
+puppetversion = ENV.key?('PUPPET_VERSION') ? "~> #{ENV['PUPPET_VERSION']}" : ['~> 3']
+gem 'puppet', puppetversion
+gem 'rake'
+gem 'puppet-lint'
+          </code></pre>
+          </section>
+          <section>
+          <h3>Rakefile</h3>
+          <pre><code class="ruby">require 'rake'
+require 'puppet-lint/tasks/puppet-lint'
+
+PuppetLint.configuration.ignore_paths = ["spec/**/*.pp", "vendor/**/*.pp"]
+PuppetLint.configuration.log_format = '%{path}:%{linenumber}:%{KIND}: %{message}'
+          </code></pre>
+          </section>
+
+          <section>
+          SORRY, OUT OF TIME :D
+          <div class="gitref">[autofs] git checkout autofs_rake_lint</div>
           </section>
 
       </div><!-- end slides -->
