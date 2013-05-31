@@ -1,6 +1,6 @@
 class autofs::service (
   $service = $::autofs::service,
-) {
+) inherits autofs {
 
   service { $service:
     ensure    => running,
