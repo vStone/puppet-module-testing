@@ -9,3 +9,32 @@
 .reveal h2 {
   font-size: 1.9em;
 }
+
+div.gitref {
+  display: none;
+}
+
+#gitinfo {
+  text-align: center;
+  position: absolute;
+  z-index: 9999;
+  bottom: 20px;
+  width: 100%;
+  margin: 0px;
+}
+
+#gitinfo .text {
+  margin-left: auto;
+  margin-right: auto;
+  background-image: url(../img/git.png);
+  background-repeat: no-repeat;
+  background-position: left center;
+  font-family: fixed, monospace;
+  text-align: left;
+  padding-left: 30px;
+  display: inline-block;
+}
+
+#gitinfo .text:empty {
+  display: none;
+}

@@ -79,24 +79,148 @@
           </section>
 
           <section>
-          <h2></h2>
+          <h2>Getting started</h2>
+          <h3>The Git repo</h3>
+          <div data-markdown >
+            <script type="text/template">
+              ___
+              [https://github.com/vStone/puppet-module-testing](https://github.com/vStone/puppet-module-testing)
+              [git://github.com/vStone/puppet-module-testing.git](git://github.com/vStone/puppet-module-testing.git)
+              ___
+              <pre><code class="shell">$ git clone git://github.com/vStone/puppet-module-testing.git puppet-module-testing-vagrant
+              </code></pre>
+
+              #### Some branches
+
+              [**gh-pages** or **talk**]: This presentation.
+
+              [**vagrant**]: A vagrant (1.2+) setup.
+
+              [**develop**]: The example autofs module.
+            </script>
+          </div>
           </section>
 
           <section>
-          <h2></h2>
+          <h2>Getting started</h2>
+          <div data-markdown >
+            <script type="text/template">
+              #### GIT References
+
+              Format
+
+              ```
+              [component] git checkout <tagname/branch>
+              ```
+              Translates into
+
+              ```
+              ~/puppet-example-component $ git checkout <tagname>
+              ```
+            </script>
+          </div>
+
+          <div class="gitref">[vagrant] git checkout vagrant_start</div>
           </section>
 
           <section>
-          <h2></h2>
+          <h2>GIT tips n tricks</h2>
+          <ul>
+            <li>Creating an empty branch:
+              <pre><code>$ git checkout --orphan NEWBRANCH</code></pre>
+            </li>
+            <li>Checking out a specific file from a branch/tag
+              <pre><code>$ git checkout REFERENCE -- FILENAME</code></pre>
+            </li>
+          </ul>
+          </section>
+
+          <section>
+          <h2>Vagrant</h2>
+          <a href="http://vagrantup.com">http://vagrantup.com</a>
+          </section>
+
+          <section>
+          <h4>Vagrantfile</h4>
+          <pre><code>$ vagrant init</code></pre>
+          <div class="gitref">[vagrant] git checkout vagrant_vagrantfile</div>
+          </section>
+
+          <section>
+          <h4>Vagrant boxes</h4>
+          <pre><code class="shell">vagrant box list</code></pre>
+          <div class="gitref">[vagrant] git checkout vagrant_box_and_puppet_structure</div>
+          </section>
+
+          <section>
+          <h4>Vagrant VM lifecycle</h4>
+          <pre><code class="shell">vagrant up
+vagrant provision
+vagrant destroy
+          </code></pre>
+          </section>
+
+          <section>
+          <h4>Vagrant machines</h4>
+          Define multiple vms in a single Vagrantfile
+          <pre><code class="ruby">config.vm.define :foo do |vm_config|
+  vm_config.vm.hostname = 'foo.example.com'
+end
+config.vm.define :bar do |vm_config|
+  vm_config.vm.hostname = 'bar.example.com'
+end
+          </code></pre>
+          <div class="gitref">[vagrant] git checkout vagrant_multi_vms</div>
+          </section>
+
+          <section>
+          <h4>Vagrant networking</h4>
+          <h5>Forwarding ports</h5>
+          <pre><code class="ruby">vm_config.vm.network :forwarded_port, guest: 80, host: 10080</code></pre>
+          <h5>Private networks ports</h5>
+          <pre><code class="ruby">vm_config.vm.network :private_network, ip: '192.168.127.100'</code></pre>
+          <div class="gitref">[vagrant] git checkout vagrant_forward_ports<br/>[vagrant] git checkout vagrant_private_network</div>
+          </section>
+
+          <section>
+          <h4>Vagrant Plugins</h4>
+          <pre><code class="ruby"># Install plugins using vagrant plugin install vagrant-hostmanager
+Vagrant.require_plugin 'vagrant-hostmanager'
+          </code></pre>
+          <pre><code class="shell">vagrant plugin install vagrant-hostmanager</code></pre>
+          <div class="gitref">[vagrant] git checkout vagrant_hostmanager</div>
+          </section>
+
+          <section>
+          <h4>Vagrant provisioning</h4>
+          <pre><code>vm_config.vm.provision :shell do |shell|
+  shell.path = 'scripts/puppet_apply.sh'
+  shell.args = 'foo'
+end</code></pre>
+          <div class="gitref">[vagrant] git checkout vagrant_provision_shell</div>
+          </section>
+
+          <section>
+          <h1>Puppet Module Testing</h1>
+          <h2>The autofs module</h2>
+          <pre><code class="shell">$ cd puppet/modules
+$ git clone git://github.com/vStone/puppet-module-testing autofs
+$ git add submodule git://github.com/vStone/puppet-module-testing puppet/modules/autofs
+          </code></pre>
+          Or if checking out:
+          <code><pre class="shell">$ git submodule init
+$ git submodule update
+## BETTER NOT USE RECURSIVE CHECKOUT WITH THIS MODULE...</code></pre>
+          <div class="gitref">[vagrant] git checkout vagrant_puppet_module_start</div>
           </section>
 
       </div><!-- end slides -->
     </div><!-- end reveal -->
 
+    <div id="gitinfo"><span class="text"></span></div>
     <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
 		<script src="reveal.js/lib/js/head.min.js"></script>
 		<script src="reveal.js/js/reveal.min.js"></script>
-
 		<script>
 
 			// Full list of configuration options available here:
@@ -105,7 +229,9 @@
 				controls: true,
 				progress: true,
 				history: true,
-				center: true,
+        center: true,
+        autoSlide: 0,
+        mouseWheel: false,
 
 				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
 				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
@@ -123,7 +249,23 @@
 				]
 			});
 
-		</script>
+    </script>
 
+
+    <script type="text/javascript"><!--
+      Reveal.addEventListener('slidechanged', function( event ) {
+          var gittext = $('section.present > div.gitref').html() || '';
+          $('#gitinfo > .text').html(gittext);
+
+          $('section.present pre code').css({position: 'relative'});
+          $('section.present pre code').click(function() {
+            $(this).css({ position: 'absolute', left: '50%'});
+            var w = $(this).outerWidth()
+            var offset = (w / 2);
+            $(this).css({ marginLeft: '-' + offset + 'px' });
+          });
+      });
+
+    --></script>
 	</body>
 </html>
