@@ -1,8 +1,19 @@
 <%
 context = "*[label() != '#comment'][. = '#{@name}']"
+options = scope.function_parse_autofs_options([@options])
 -%>
 
-<%# TODO: deal with options %>
+rm <%= context %>/opt
+<%
+  options.keys.sort.each do |k|
+  opt = k
+  value = options[k]
+-%>
+set <%= context %>/opt[last() + 1] '<%= opt %>'
+  <% unless value.nil? or value.empty? -%>
+set <%= context %>/opt[last()]/value '<%= value %>'
+  <% end -%>
+<% end -%>
 
 rm <%= context %>/location
 set <%= context %>/location/01/host '<%= @host %>'
