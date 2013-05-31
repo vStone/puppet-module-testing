@@ -2,3 +2,16 @@
 hiera_example: 'Open the bottle! Drink it! And insert a message.'
 
 autofs::mode: '0640'
+
+autofs::mounts:
+  include_title:
+    purge: false
+    mount: /data
+    shares:
+      foo:
+        host: foobar.example.com
+        location: /foodata
+
+      bar:
+        host: foobar.example.com
+        location: /bardata

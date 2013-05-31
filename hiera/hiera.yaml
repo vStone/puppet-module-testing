@@ -7,5 +7,7 @@
 :hierarchy: - %{module_name}
             - common
 
+:merge_behavior: deeper
+
 :yaml:
   :datadir: /etc/puppet/hieradata
