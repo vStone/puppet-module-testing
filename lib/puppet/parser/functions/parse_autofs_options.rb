@@ -17,6 +17,18 @@ module Puppet::Parser::Functions
     # convert an array to a hash.
     if options.is_a?(Array)
       hash = {}
+      options.each do |opt|
+        if opt =~ /([^=]+)(=(.+))?/
+          key = $1
+          if key.empty?
+            function_warning(["Missing key in option #{opt}"])
+          elsif $2.nil?
+            hash[key] = nil
+          else
+            hash[key] = $3
+          end
+        end
+      end
       return hash
     end
 
@@ -24,8 +36,14 @@ module Puppet::Parser::Functions
     unless options.is_a?(Hash)
       raise Puppet::ParseError, "Unsupported argument type: #{args.class}."
     end
-
-    # return the hash
+    # sanitize the hash.
+    options.keys.each do |k|
+      unless options[k].nil?
+        if options[k].empty? or options[k].strip.empty?
+          options[k] = nil
+        end
+      end
+    end
     options
   end # newfunction
 end # module Puppet::Parser::Functions
