@@ -6,17 +6,20 @@ describe 'autofs::include', :type => :define do
 
   describe 'initialize default parameters' do
     # TODO: Test the other defaulted parameters in a way.
+    #
 
     describe "with title: 'default'" do
       let (:title) { 'default' }
 
       it { should contain_file('/etc/auto.default') }
+      it { should contain_augeas('autofs::include::add-/default').with_onlyif(/\[\.\s\=\s'\/default'\]/) }
     end
 
     describe "with title: 'auto.foobar'" do
       let (:title) {'auto.foobar' }
 
       it { should contain_file('/etc/auto.foobar') }
+      it { should contain_augeas('autofs::include::add-/foobar').with_onlyif(/\[\.\s\=\s'\/foobar'\]/) }
     end
 
 
@@ -32,6 +35,7 @@ describe 'autofs::include', :type => :define do
         :mount   => '/exists'
       } }
 
+      it { should contain_augeas('autofs::include::update-/exists') }
       it { should contain_file('/etc/auto.newvalue').with_path('/etc/auto.newvalue').with_ensure('present') }
 
     end
@@ -45,6 +49,7 @@ describe 'autofs::include', :type => :define do
         :mount   => '/totalynew',
       } }
 
+      it { should contain_augeas('autofs::include::add-/totalynew') }
       it { should contain_file('/etc/auto.newmount').with_path('/etc/auto.newmount').with_ensure('present') }
 
     end
@@ -60,6 +65,7 @@ describe 'autofs::include', :type => :define do
         :mount   => '/remove',
       } }
 
+      it { should contain_augeas('autofs::include::rm-/remove') }
       it { should contain_file('/etc/auto.remove').without_ensure('absent') }
 
     end
@@ -73,6 +79,7 @@ describe 'autofs::include', :type => :define do
         :mount   => '/remove',
       } }
 
+      it { should contain_augeas('autofs::include::rm-/remove') }
       it { should contain_file('/etc/auto.remove').with_ensure('absent') }
     end
 
