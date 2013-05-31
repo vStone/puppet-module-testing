@@ -1,0 +1,9 @@
+<%
+context = "*[label() != '#comment'][. = '#{@name}']"
+-%>
+
+<%# TODO: deal with options %>
+
+rm <%= context %>/location
+set <%= context %>/location/01/host '<%= @host %>'
+set <%= context %>/location/01/path '<%= @location %>'
