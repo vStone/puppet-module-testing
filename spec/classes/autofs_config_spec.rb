@@ -12,4 +12,13 @@ describe 'autofs::config', :type => :class  do
 
     it { should contain_file('/etc/auto.master').with_mode('0640') }
   end
+
+  describe 'should inherit parameters from autofs' do
+    let (:pre_condition) {
+      "class {'autofs': master => '/etc/auto.master.xxx', }"
+    }
+
+    it { should contain_file('/etc/auto.master.xxx') }
+  end
+
 end
