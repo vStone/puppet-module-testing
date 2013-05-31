@@ -6,5 +6,7 @@ gem 'puppet', puppetversion
 gem 'rake'
 gem 'puppet-lint'
 gem 'rspec'
-gem 'rspec-puppet', '= 0.1.6'
+gem 'rspec-puppet', :path => 'src/rspec-puppet'
 gem 'puppetlabs_spec_helper'
+
+gem 'awesome_print'
