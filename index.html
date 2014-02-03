@@ -232,12 +232,6 @@ gem 'puppet-lint'
           </code></pre>
           </section>
           <section>
-          <h3>Ruby $!%^&amp;</h3>
-          <h4>Versioning hell.</h4>
-          <pre><code>gem 'mime-types', (RUBY_VERSION =~ /^1.8/ ? '~&gt; 1.25.1' : nil)
-          </code></pre>
-          </section>
-          <section>
           <h3>Rakefile</h3>
           <pre><code class="ruby">require 'rake'
 require 'puppet-lint/tasks/puppet-lint'
@@ -248,8 +242,196 @@ PuppetLint.configuration.log_format = '%{path}:%{linenumber}:%{KIND}: %{message}
           </section>
 
           <section>
-          SORRY, OUT OF TIME :D
+          <h3>Running rake</h3>
+          <pre><code class="shell">$ bundle exec rake -T
+rake lint  # Run puppet-lint
+          </code></pre>
+          <pre><code class="shell">$ bundle exec rake
+manifests/config.pp:1:ERROR: autofs::config not in autoload module layout
+manifests/config.pp:1:WARNING: class not documented
+manifests/init.pp:9:ERROR: autofs not in autoload module layout
+manifests/init.pp:17:WARNING: class inheriting from params class
+          </code></pre>
+
           <div class="gitref">[autofs] git checkout autofs_rake_lint</div>
+          </section>
+
+          <section>
+          <h3>Ruby $!%^&amp;</h3>
+          <h4>Versioning hell.</h4>
+          <pre><code>gem 'mime-types', (RUBY_VERSION =~ /^1.8/ ? '~&gt; 1.25.1' : nil)
+          </code></pre>
+          </section>
+
+          <section>
+          <h3>Rspec-puppet</h3>
+          <h4>Gemfile</h4>
+          <pre><code class="ruby">gem 'rspec'
+gem 'rspec-puppet', '= 0.1.6'
+gem 'puppetlabs_spec_helper'
+          </code></pre>
+          <h4>Rakefile</h4>
+          <pre><code class="ruby">require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.pattern = 'spec/*/*_spec.rb'
+end
+task :default =&gt; [:spec, :lint]
+          </code></pre>
+          </section>
+          <section>
+          <h4>spec/spec_helper.rb</h4>
+          <pre><code class="ruby">require 'rspec-puppet'
+
+# mainly sets up fixtures.
+fixture_path = File.expand_path(File.join(__FILE__, '..', 'fixtures'))
+
+RSpec.configure do |c|
+  c.module_path = File.join(fixture_path, 'modules')
+  c.manifest_dir = File.join(fixture_path, 'manifests')
+end
+
+# also the perfect place for test-wide code.
+          </code></pre>
+          </section>
+          <section>
+          <h3>First (simple) Test</h3>
+          <pre><code lang="ruby">require 'spec_helper'
+describe 'autofs' do
+  describe 'on CentOS' do
+    let (:facts) { { :osfamily =&gt; 'RedHat' } }
+
+    it { should include_class('autofs::package') }
+    it { should include_class('autofs::service') }
+    it { should include_class('autofs::config') }
+  end
+end
+          </code></pre>
+          </section>
+          <section>
+          <h4>But... it should FAIL!</h4>
+          <pre><code class="ruby"># TODO: Fix this (deprecated)
+  describe 'on another OS' do
+    let (:facts) { { :osfamily =&gt; 'Something' } }
+
+    it do
+      expect {
+        should include_class('autofs::params')
+      }.to raise_error(Puppet::Error, /osfamily not supported:/)
+    end
+  end
+          </code></pre>
+          </section>
+          <section>
+          <h3>Tweaking rspec</h3>
+          <pre><code class="ruby"># We add a new target rather than overwriting
+
+RSpec::Core::RakeTask.new(:test) do |t|
+  t.pattern = 'spec/*/*_spec.rb'
+  t.rspec_opts = File.read('spec/spec.opts').chomp || ""
+end
+
+          </code></pre>
+          </section>
+
+          <section>
+          <h3>The answer to how to use rspec-puppet further</h3>
+          <pre style="text-align: center;"><code>
+ ____ _____ _____ __  __
+ |  _ \_   _|  ___|  \/  |
+ | |_) || | | |_  | |\/| |
+ |  _ &lt; | | |  _| | |  | |
+ |_| \_\|_| |_|   |_|  |_|
+
+          </code></pre>
+          <div><a href="http://rspec-puppet.com/">http://rspec-puppet.com/</a></div>
+          </section>
+
+          <section><h3>puppetlabs_spec_helper</h3>
+          <h4>Fixtures Symlink Madness Be GONE!</h4>
+          <pre><code class="yaml"># .fixtures.yml
+fixtures:
+  symlinks:
+    autofs: '#{source_dir}'
+
+  repositories:
+    stdlib: git://github.com/puppetlabs/puppetlabs-stdlib.git
+          </code></pre>
+          </section>
+
+          <section>
+          <h2>Travis</h2>
+          <pre><code class="yaml">language: ruby
+rvm:
+  - "1.8.7"
+  - "1.9.3"
+
+before_install:
+  - sudo apt-get install -qq libaugeas-dev
+
+script: 'rake'
+
+env:
+  - PUPPET_VERSION="2.7"
+  - PUPPET_VERSION="3.0"
+
+branches:
+  except:
+    - master
+    - gh-pages
+          </code></pre>
+          </section>
+
+          <section><h3>rspec-puppet-augeas</h3>
+<h4>Tweak Gemfile/Rspec</h4>
+          <pre><code class="diff">--- a/Gemfile
++++ b/Gemfile
+@@ -11,3 +11,5 @@ gem 'puppet-lint'
+ gem 'rspec'
+ gem 'rspec-puppet', '= 0.1.6'
+ gem 'puppetlabs_spec_helper'
++gem 'rspec-puppet-augeas'
++gem 'ruby-augeas'
+diff --git a/spec/spec_helper.rb b/spec/spec_helper.rb
+index d3923f8..c206c0b 100644
+--- a/spec/spec_helper.rb
++++ b/spec/spec_helper.rb
+@@ -1,8 +1,10 @@
+ require 'rspec-puppet'
++require 'rspec-puppet-augeas'
+
+ fixture_path = File.expand_path(File.join(__FILE__, '..', 'fixtures'))
+
+ RSpec.configure do |c|
+   c.module_path = File.join(fixture_path, 'modules')
+   c.manifest_dir = File.join(fixture_path, 'manifests')
++  c.augeas_fixtures = File.join(fixture_path, 'augeas')
+ end
+          </code></pre>
+          </section>
+          <section><h4>The Setup</h4>
+          <pre><code class="puppet"># update an entry if it exists
+augeas{"autofs::include::update-${_mount}":
+  before  =&gt; Augeas["autofs::include::add-${_mount}"],
+  changes =&gt; "set ${context}/map '${_mapfile}'",
+  onlyif  =&gt; "match ${context} size &gt; 0",
+}
+          </code></pre>
+          </section>
+          <section><h4>Fixture(s)</h4>
+          <pre><code lang="text"># spec/fixtures/augeas/etc/auto.master
+/exists /etc/auto.exists
+/remove /etc/auto.remove
+          </code></pre>
+          <h4>The test</h4>
+          <pre><code class="ruby">
+describe_augeas 'autofs::include::update-/exists', :lens =&gt; 'Automaster', :target =&gt; 'etc/auto.master' do
+  it 'should modify existing value' do
+    should execute.with_change
+    aug_get('*[. = "/exists"]/map').should == '/etc/auto.newvalue'
+    should execute.idempotently
+  end
+end
+          </code></pre>
           </section>
 
       </div><!-- end slides -->
