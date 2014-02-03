@@ -232,6 +232,12 @@ gem 'puppet-lint'
           </code></pre>
           </section>
           <section>
+          <h3>Ruby $!%^&amp;</h3>
+          <h4>Versioning hell.</h4>
+          <pre><code>gem 'mime-types', (RUBY_VERSION =~ /^1.8/ ? '~&gt; 1.25.1' : nil)
+          </code></pre>
+          </section>
+          <section>
           <h3>Rakefile</h3>
           <pre><code class="ruby">require 'rake'
 require 'puppet-lint/tasks/puppet-lint'
