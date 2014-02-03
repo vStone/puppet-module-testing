@@ -242,8 +242,9 @@ PuppetLint.configuration.log_format = '%{path}:%{linenumber}:%{KIND}: %{message}
           </section>
 
           <section>
-          <h3>Running rake</h3>
-          <pre><code class="shell">$ bundle exec rake -T
+          <h3>Running rake (with bundler)</h3>
+          <pre><code class="shell">$ bundle install --path=vendor
+$ bundle exec rake -T
 rake lint  # Run puppet-lint
           </code></pre>
           <pre><code class="shell">$ bundle exec rake
@@ -323,13 +324,17 @@ end
           </section>
           <section>
           <h3>Tweaking rspec</h3>
-          <pre><code class="ruby"># We add a new target rather than overwriting
+          <pre><code class="ruby"># Rakefile
 
+# Note: Different target: Buildbots don't care about verboseness
 RSpec::Core::RakeTask.new(:test) do |t|
   t.pattern = 'spec/*/*_spec.rb'
   t.rspec_opts = File.read('spec/spec.opts').chomp || ""
 end
+          </code></pre>
+          <pre><code># spec/spec.opts
 
+--format documentation --colour --backtrace
           </code></pre>
           </section>
 
@@ -347,6 +352,33 @@ end
           </section>
 
           <section><h3>puppetlabs_spec_helper</h3>
+          <h4>Uses stages</h4>
+          <ul>
+            <li>Prep (fixtures)</li>
+            <li>Test</li>
+            <li>Cleanup</li>
+          </ul>
+          <p></p>
+          <div>Default target is <i>spec</i>.</div>
+          </section>
+          <section>
+          <pre><code class="ruby"># Rakefile
+require 'puppetlabs_spec_helper/rake_tasks'
+
+RSpec::Core::RakeTask.new(:spec_verbose) do |t|
+   t.pattern = 'spec/*/*_spec.rb'
+   t.rspec_opts = File.read('spec/spec.opts').chomp || ""
+end
+
+task :test do
+  Rake::Task[:spec_prep].invoke
+  Rake::Task[:spec_verbose].invoke
+  Rake::Task[:spec_clean].invoke
+end
+
+          </code></pre>
+          </section>
+          <section>
           <h4>Fixtures Symlink Madness Be GONE!</h4>
           <pre><code class="yaml"># .fixtures.yml
 fixtures:
