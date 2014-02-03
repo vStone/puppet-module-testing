@@ -208,7 +208,7 @@ $ git clone git://github.com/vStone/puppet-module-testing autofs
 $ git add submodule git://github.com/vStone/puppet-module-testing puppet/modules/autofs
           </code></pre>
           Or if checking out:
-          <code><pre class="shell">$ git submodule init
+          <pre><code class="shell">$ git submodule init
 $ git submodule update
 ## BETTER NOT USE RECURSIVE CHECKOUT WITH THIS MODULE...</code></pre>
           <div class="gitref">[vagrant] git checkout vagrant_puppet_module_start</div>
@@ -218,14 +218,14 @@ $ git submodule update
           <h1>The autofs module</h1>
           <h2>Basic structure</h2>
           Some puppet code:
-          <pre><code class="shell">$ git checkout autofs_ppcs_start -- manifests/{init,config,params,service,package}.pp</pre></code>
+          <pre><code class="shell">$ git checkout autofs_ppcs_start -- manifests/{init,config,params,service,package}.pp</code></pre>
           <div class="gitref">[autofs] git checkout autofs_ppcs_start</div>
           </section>
 
           <section>
           <h3>Gemfile</h3>
           <pre><code class="ruby">source 'https://rubygems.org'
-puppetversion = ENV.key?('PUPPET_VERSION') ? "~> #{ENV['PUPPET_VERSION']}" : ['~> 3']
+puppetversion = ENV.key?('PUPPET_VERSION') ? "~&gt; #{ENV['PUPPET_VERSION']}" : ['~&gt; 3']
 gem 'puppet', puppetversion
 gem 'rake'
 gem 'puppet-lint'
