@@ -466,6 +466,40 @@ end
           </code></pre>
           </section>
 
+          <section>
+          <h2>hiera</h2>
+          <h3>Reasons?</h3>
+          <ul>
+            <li>No support for defs in hiera</li>
+            <li>Need for wrapper classes<li>
+            <li>Test those classes</li>
+          </ul>
+          </section>
+
+          <section>
+          <h4>Gemfile</h4>
+          <pre><code class="ruby">gem 'hiera-puppet-helper'</code></pre>
+          <h4>spec/spec_helper.rb</h4>
+          <pre><code class="ruby">require 'hiera-puppet-helper'
+module Helpers
+  def hieraconfig(hierarchy = ['common'])
+    hierarchy = [hierarchy] if hierarchy.is_a?(String)
+    r = {
+      :backends =&gt; ['yaml'],
+      :hierarchy =&gt; hierarchy,
+      :yaml =&gt; { :datadir =&gt; File.expand_path(File.join(__FILE__, '..', 'fixtures/hiera')) }
+    }
+    r
+  end
+end
+RSpec.configure do |c|
+   c.include Helpers
+   c.module_path = File.join(fixture_path, 'modules')
+   c.manifest_dir = File.join(fixture_path, 'manifests')
+end
+          </code></pre>
+          </section>
+
       </div><!-- end slides -->
     </div><!-- end reveal -->
 
