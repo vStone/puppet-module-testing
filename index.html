@@ -70,8 +70,8 @@
               * Tools
                 * rspec-puppet
                 * puppetlabs_spec_helper
-                * hiera puppet testing (?)
                 * rspec-augeas
+                * hiera puppet testing
               * Extra
                 * travis-ci
             </script>
@@ -400,7 +400,7 @@ rvm:
 before_install:
   - sudo apt-get install -qq libaugeas-dev
 
-script: 'rake'
+script: 'bundle rake'
 
 env:
   - PUPPET_VERSION="2.7"
