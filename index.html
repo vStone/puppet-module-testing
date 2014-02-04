@@ -400,7 +400,7 @@ rvm:
 before_install:
   - sudo apt-get install -qq libaugeas-dev
 
-script: 'bundle rake'
+script: 'bundle exec rake'
 
 env:
   - PUPPET_VERSION="2.7"
