@@ -1,0 +1,12 @@
+---
+autofs::mounts:
+  foobar:
+    purge: false
+    mount: /data
+    shares:
+      foo:
+        host: foo.example.com
+        location: /foo
+      bar:
+        host: bar.example.com
+        location: /bar

@@ -13,3 +13,5 @@ gem 'rspec-puppet', '= 0.1.6'
 gem 'puppetlabs_spec_helper'
 gem 'rspec-puppet-augeas', :git => 'git://github.com/vStone/rspec-puppet-augeas', :branch => 'feature/custom_lensdir'
 gem 'ruby-augeas'
+
+gem 'hiera-puppet-helper'
