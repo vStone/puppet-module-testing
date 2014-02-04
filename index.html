@@ -471,7 +471,7 @@ end
           <h3>Reasons?</h3>
           <ul>
             <li>No support for defs in hiera</li>
-            <li>Need for wrapper classes<li>
+            <li>Need for wrapper classes</li>
             <li>Test those classes</li>
           </ul>
           </section>
@@ -496,6 +496,54 @@ RSpec.configure do |c|
    c.include Helpers
    c.module_path = File.join(fixture_path, 'modules')
    c.manifest_dir = File.join(fixture_path, 'manifests')
+end
+          </code></pre>
+          </section>
+
+          <section>
+          <h4>autofs::loader</h4>
+          <pre><code class="puppet">class autofs::loader {
+
+  $tree = hiera_hash('autofs::mounts', {})
+  create_resources_autofs($tree)
+
+}
+          </code></pre>
+          </section>
+
+          <section>
+          <h4>spec/fixtures/hiera/single.yaml</h4>
+          <pre><code class="yaml">---
+autofs::mounts:
+  foobar:
+    purge: false
+    mount: /data
+    shares:
+      foo:
+        host: foo.example.com
+        location: /foo
+      bar:
+        host: bar.example.com
+        location: /bar
+          </code></pre>
+          </section>
+          <section>
+          <h4>spec/classes/autofs_loader_spec.rb</h4>
+          <pre><code class="ruby">require 'spec_helper'
+
+describe 'autofs::loader' do
+  let (:facts) { { :osfamily =&gt; 'RedHat' } }
+
+  describe 'single hiera yaml file' do
+    let :hiera_config do
+      hieraconfig(['single'])
+    end
+
+    it { should include_class('autofs::loader') }
+    it { should contain_autofs__include('foobar') }
+    it { should contain_autofs__mount('foo') }
+    it { should contain_autofs__mount('bar') }
+  end
 end
           </code></pre>
           </section>
