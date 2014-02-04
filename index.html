@@ -238,6 +238,7 @@ require 'puppet-lint/tasks/puppet-lint'
 
 PuppetLint.configuration.ignore_paths = ["spec/**/*.pp", "vendor/**/*.pp"]
 PuppetLint.configuration.log_format = '%{path}:%{linenumber}:%{KIND}: %{message}'
+PuppetLint.configuration.send('disable_autoloader_layout')
           </code></pre>
           </section>
 
@@ -248,10 +249,9 @@ $ bundle exec rake -T
 rake lint  # Run puppet-lint
           </code></pre>
           <pre><code class="shell">$ bundle exec rake
-manifests/config.pp:1:ERROR: autofs::config not in autoload module layout
 manifests/config.pp:1:WARNING: class not documented
-manifests/init.pp:9:ERROR: autofs not in autoload module layout
 manifests/init.pp:17:WARNING: class inheriting from params class
+...
           </code></pre>
 
           <div class="gitref">[autofs] git checkout autofs_rake_lint</div>
